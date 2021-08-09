@@ -2,6 +2,7 @@ import os
 from flask import Flask, flash, render_template, request, session, url_for, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # imports env if a path to "env.py" is found
 if os.path.exists("env.py"):
@@ -23,6 +24,11 @@ mongo = PyMongo(app)
 @app.route("/get_tasks")
 def get_tasks():
     return render_template("tasks.html", tasks=mongo.db.tasks.find())
+
+# Route for resgistering a new user
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    return render_template("register.html")
 
 
 # tells app how and where to run
