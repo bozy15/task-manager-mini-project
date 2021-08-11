@@ -41,21 +41,46 @@ def register():
             return redirect(url_for("register"))
 
         # if username is not in the database, register the user
-        register = (
-            {
-                "username": request.form.get("username").lower(),
-                "password": generate_password_hash(request.form.get("password")),
-            }
-        )
+        register = {
+            "username": request.form.get("username").lower(),
+            "password": generate_password_hash(request.form.get("password")),
+        }
         mongo.db.users.insert_one(register)
 
-        # Put the new user into A "session" cookie 
+        # Put the new user into A "session" cookie
         # so that the user can be logged in
         # (this is a security measure)
         session["user"] = request.form.get("username").lower()
         flash("User successfully registered")
 
     return render_template("register.html")
+
+
+# Route for logging in a user
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        # Checks if the username is in the database
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()}
+        )
+
+        # If the username is in the database, check if the password is correct
+        if existing_user:
+            if check_password_hash(
+                existing_user["password"], request.form.get("password")
+            ):
+                # Put the user into a session cookie
+                session["user"] = request.form.get("username").lower()
+                flash("Welcome, {}".format(request.form.get("username")))
+            else:
+                flash("Incorrect Username and/or password")
+                return redirect(url_for("login"))
+        else:
+            #User does not exist
+            flash("Incorrect Username and/or password")
+            return redirect(url_for("login"))
+    return render_template("login.html")
 
 
 # tells app how and where to run
