@@ -26,11 +26,11 @@ def get_tasks():
     return render_template("tasks.html", tasks=mongo.db.tasks.find())
 
 
-# Route for resgistering a new user
+# Route for registering a new user
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        # chesks if username is already in the database
+        # checks if username is already in the database
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()}
         )
@@ -70,7 +70,7 @@ def login():
             if check_password_hash(
                 existing_user["password"], request.form.get("password")
             ):
-                # Put the user into a session cookie
+                # Put the user into a 'session' cookie
                 session["user"] = request.form.get("username").lower()
                 flash("Welcome, {}".format(request.form.get("username")))
                 return redirect(url_for("profile", username=session["user"]))
@@ -87,11 +87,26 @@ def login():
 # Route for users profile
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
-    # grabs a session user's username from the database
+    # grabs the session user's username from the database
     username = mongo.db.users.find_one({"username": session["user"]})["username"]
-    return render_template("profile.html", username=username)
+
+    # if the user is logged in, show their profile
+    # otherwise, redirect to login page
+    if session["user"]:
+        return render_template("profile.html", username=username)
+
+    return redirect(url_for("login"))
 
 
-# tells app how and where to run
+# Route for logging out a user
+@app.route("/logout")
+def logout():
+    # removes the user's session cookie
+    session.pop("user", None)
+    flash("You have been logged out")
+    return redirect(url_for("login"))
+
+
+# Tells app how and where to run
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)
