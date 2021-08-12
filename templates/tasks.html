@@ -2,8 +2,8 @@
 {% extends "base.html" %}
 {% block content %}
 
-    
-<!-- Loops through all items from .find function -->
+
+    <!-- Loops through all items from .find function -->
     {% for task in tasks %}
         {{ task.task_name }} <br>
         {{ task.catergory_name }} <br>
@@ -11,5 +11,20 @@
         {{ task.is_urgent }} <br>
         {{ task.due_date }} <br>
     {% endfor %}
+
+    <ul class="collapsible">
+        <li>
+            <div class="collapsible-header white-text light-blue darken-4 text-shadow"><i class="fas fa-caret-down"></i>First</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
+        <li>
+            <div class="collapsible-header white-text light-blue darken-4 text-shadow"><i class="fas fa-caret-down"></i>Second</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
+        <li>
+            <div class="collapsible-header white-text light-blue darken-4 text-shadow"><i class="fas fa-caret-down"></i>Third</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
+    </ul>
 
 {% endblock %}
