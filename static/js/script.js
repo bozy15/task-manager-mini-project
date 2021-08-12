@@ -1,11 +1,13 @@
 // All JS contained in this file will run once the page has fully loaded
 $(document).ready(function () {
 
-  // A function that will allow the Materialize mobile navbar to work
+  // Initialize the side menu functionality
   $(".sidenav").sidenav({edge: "right"});
 
-  // A function that will allow the Materialize dropdown to work
+  // Initialize the collapsible functionality
   $('.collapsible').collapsible();
-  
+
+  // Initalize the tooltips
+  $('.tooltipped').tooltip();
 });
 
