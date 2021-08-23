@@ -110,7 +110,9 @@ def logout():
 # Route for adding a task
 @app.route("/add_task")
 def add_task():
-    return render_template("add_task.html")
+    # Generates <option> instance for category in collection
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    return render_template("add_task.html", categories=categories)
 
 
 # Tells app how and where to run

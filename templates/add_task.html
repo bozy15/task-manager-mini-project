@@ -5,9 +5,25 @@
     <h3 class="light-blue-text text-darken-4 center-align">Add Task</h3>
 
 
-
+    <!-- Add Task Form -->
     <div class="row card-panel grey lighten-5">
         <form class="col s12" method="POST" action="">
+            <!-- Options Dropdown -->
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="fas fa-folder-open prefix light-blue-text text-darken-4"></i>
+                    <select id="category_name" name="category_name" class="validate" required>
+                        <option value="" disabled selected>Choose Category</option>
+                        <!-- For loop that generates options -->
+                        {% for category in categories %}
+                            <option value="{{ category.category_name }}">{{ category.category_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="category_name">Task Category</label>
+                </div>
+            </div>
+            <!-- End Options Dropdown -->
+            <!-- Task Name -->
             <div class="row">
                 <div class="input-field col s12">
                     <i class="fas fa-pencil-alt prefix light-blue-text text-darken-4"></i>
@@ -15,6 +31,8 @@
                     <label for="task_name">Task Name</label>
                 </div>
             </div>
+            <!-- End Task Name -->
+            <!-- Task Description -->
             <div class="row">
                 <div class="input-field col s12">
                     <i class="fas fa-align-left prefix light-blue-text text-darken-4"></i>
@@ -23,6 +41,8 @@
                     <label for="task_description">Textarea</label>
                 </div>
             </div>
+            <!-- End Task Description -->
+            <!-- Task Date -->
             <div class="row">
                 <div class="input-field col s12">
                     <i class="fas fa-calendar-alt prefix light-blue-text text-darken-4"></i>
@@ -30,6 +50,8 @@
                     <label for="due_date">Due Date</label>
                 </div>
             </div>
+            <!-- End Task Date -->
+            <!-- Submit Button -->
             <div class="row">
                 <div class="input-field col s12">
                     <div class="switch">
@@ -42,8 +64,12 @@
                     </div>
                 </div>
             </div>
+            <!-- End Submit Button -->
+            
+
         </form>
     </div>
+    <!-- End Add Task Form -->
 
 
 
