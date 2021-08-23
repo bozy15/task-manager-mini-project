@@ -7,7 +7,7 @@
 
     <!-- Add Task Form -->
     <div class="row card-panel grey lighten-5">
-        <form class="col s12" method="POST" action="">
+        <form class="col s12" method="POST" action="{{ url_for('add_task') }}">
             <!-- Options Dropdown -->
             <div class="row">
                 <div class="input-field col s12">
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <!-- End Task Date -->
-            <!-- Submit Button -->
+            <!-- Urgent Switch -->
             <div class="row">
                 <div class="input-field col s12">
                     <div class="switch">
@@ -62,6 +62,15 @@
                             Is Urgent
                         </label>
                     </div>
+                </div>
+            </div>
+            <!-- End Urgent Switch -->
+            <!-- Submit Button -->
+            <div class="row">
+                <div class="col s12 center-align">
+                    <button type="submit" class="btn-large light-blue darken-1 text-shadow">
+                        Add Task <i class="fas fa-plus-square right"></i>
+                    </button>
                 </div>
             </div>
             <!-- End Submit Button -->
