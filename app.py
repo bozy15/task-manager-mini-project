@@ -136,12 +136,26 @@ def add_task():
 def edit_task(task_id):
     # Grabs the task from the database
     task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+    if request.method == "POST":
+        is_urgent = "on" if request.form.get("is_urgent") else "off"
+        # Grabs the task details from the form and stores them in a dictionary
+        submit = {
+            "category_name": request.form.get("category_name"),
+            "task_name": request.form.get("task_name"),
+            "task_description": request.form.get("task_description"),
+            "is_urgent": is_urgent,
+            "due_date": request.form.get("due_date"),
+            "created_by": session["user"]
+        }
+        # Grabs the task from the task dictionary and adds it to the database
+        mongo.db.tasks.update({"_id": ObjectId(task_id)}, submit)
+        flash("Task Successfully Updated")
 
     # Grabs the category from the database
     categories = mongo.db.categories.find().sort("category_name", 1)
     return render_template("edit_task.html", task=task, categories=categories)
-    
-    
+
+
 # Tells app how and where to run
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)
