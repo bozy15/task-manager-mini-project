@@ -186,6 +186,21 @@ def add_category():
     return render_template("add_category.html")
 
 
+# Route for editing a category
+@app.route("/edit_category/<category_id>", methods=["GET", "POST"])
+def edit_category(category_id):
+    # Grabs the category from the database
+    category = mongo.db.categories.find_one({"_id": ObjectId(category_id)})
+    if request.method == "POST":
+        # Grabs the category from the form and stores it in a dictionary
+        submit = {"category_name": request.form.get("category_name")}
+        # Grabs the category from the dictionary and adds it to the database
+        mongo.db.categories.update({"_id": ObjectId(category_id)}, submit)
+        flash("Category Successfully Updated")
+        # Redirects to the categories page
+        return redirect(url_for("get_categories"))
+    return render_template("edit_category.html", category=category)
+
 # Tells app how and where to run
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)
