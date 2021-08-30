@@ -163,6 +163,13 @@ def delete_task(task_id):
     flash("Task Successfully Deleted")
     return redirect(url_for("get_tasks"))
 
+# Route for getting categories
+@app.route("/get_categories")
+def get_categories():
+    # Grabs all the categories from the database
+    categories = list(mongo.db.categories.find().sort("category_name", 1))
+    return render_template("categories.html", categories=categories)
+
 
 # Tells app how and where to run
 if __name__ == "__main__":
