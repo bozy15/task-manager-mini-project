@@ -119,7 +119,7 @@ def add_task():
             "task_description": request.form.get("task_description"),
             "is_urgent": is_urgent,
             "due_date": request.form.get("due_date"),
-            "created_by": session["user"]
+            "created_by": session["user"],
         }
         # Grabs the task from the task dictionary and adds it to the database
         mongo.db.tasks.insert_one(task)
@@ -145,7 +145,7 @@ def edit_task(task_id):
             "task_description": request.form.get("task_description"),
             "is_urgent": is_urgent,
             "due_date": request.form.get("due_date"),
-            "created_by": session["user"]
+            "created_by": session["user"],
         }
         # Grabs the task from the task dictionary and adds it to the database
         mongo.db.tasks.update({"_id": ObjectId(task_id)}, submit)
@@ -163,12 +163,27 @@ def delete_task(task_id):
     flash("Task Successfully Deleted")
     return redirect(url_for("get_tasks"))
 
+
 # Route for getting categories
 @app.route("/get_categories")
 def get_categories():
     # Grabs all the categories from the database
     categories = list(mongo.db.categories.find().sort("category_name", 1))
     return render_template("categories.html", categories=categories)
+
+
+# Route for adding a category
+@app.route("/add_category", methods=["GET", "POST"])
+def add_category():
+    if request.method == "POST":
+        # Grabs the category from the form and stores it in a dictionary
+        category = {"category_name": request.form.get("category_name")}
+        # Grabs the category from the dictionary and adds it to the database
+        mongo.db.categories.insert_one(category)
+        flash("Category Successfully Added")
+        # Redirects to the categories page
+        return redirect(url_for("get_categories"))
+    return render_template("add_category.html")
 
 
 # Tells app how and where to run
