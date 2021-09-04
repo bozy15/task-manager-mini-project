@@ -2,6 +2,7 @@ import os
 from flask import Flask, flash, render_template, request, session, url_for, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from pymongo.message import query
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # imports env if a path to "env.py" is found
@@ -23,7 +24,16 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_tasks")
 def get_tasks():
-    return render_template("tasks.html", tasks=mongo.db.tasks.find())
+    tasks = list(mongo.db.tasks.find())
+    return render_template("tasks.html", tasks=tasks)
+
+
+# Route for searching for a task
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    tasks = list(mongo.db.tasks.find({"$text": {"$search": query}}))
+    return render_template("tasks.html", tasks=tasks)
 
 
 # Route for registering a new user
@@ -212,4 +222,4 @@ def delete_category(category_id):
 
 # Tells app how and where to run
 if __name__ == "__main__":
-    app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)
+    app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=False)
